@@ -1,1 +1,118 @@
+#include <stdio.h>
+#define MAX 100
+
+// Global queue and pointers
+int queue[MAX];
+int front = -1;
+int rear = -1;
+
+// 1. Inserting an element in an existing queue
+void insertElement(int value) {
+    if (rear == MAX - 1) {
+        printf("Queue Overflow! Cannot insert.\n");
+        return;
+    }
+    // If inserting the first element, set front to 0
+    if (front == -1) {
+        front = 0;
+    }
+    queue[++rear] = value;
+    printf("Inserted: %d\n", value);
+}
+
+// 2. Standard Queue Delete (Dequeue) - based on your handwritten snippet
+int dequeue() {
+    if (front == -1 || front > rear) {
+        printf("Q is empty\n");
+        front = rear = -1; // Reset pointers
+        return -1;
+    }
+    int deletedValue = queue[front++];
+    printf("Dequeued (front delete): %d\n", deletedValue);
+    return deletedValue;
+}
+
+// 2b. Deleting a specific element that is already in the queue (Search & Remove)
+void deleteSpecificElement(int value) {
+    if (front == -1 || front > rear) {
+        printf("Q is empty\n");
+        return;
+    }
+    
+    int found = 0;
+    for (int i = front; i <= rear; i++) {
+        if (queue[i] == value) {
+            found = 1;
+            // Shift elements left to close the gap
+            for (int j = i; j < rear; j++) {
+                queue[j] = queue[j + 1];
+            }
+            rear--; // Shrink the queue size
+            printf("Deleted specific element: %d\n", value);
+            break; // Stop after deleting the first matching instance
+        }
+    }
+    
+    if (!found) {
+        printf("Element %d not found to delete.\n", value);
+    }
+    
+    // Reset if the queue becomes empty after deletion
+    if (front > rear) {
+        front = rear = -1;
+    }
+}
+
+// 3. Updating an element in a queue with another
+void updateElement(int oldValue, int newValue) {
+    if (front == -1 || front > rear) {
+        printf("Q is empty\n");
+        return;
+    }
+    
+    for (int i = front; i <= rear; i++) {
+        if (queue[i] == oldValue) {
+            queue[i] = newValue;
+            printf("Updated: %d to %d\n", oldValue, newValue);
+            return; // Stop after the first update
+        }
+    }
+    printf("Element %d not found for update.\n", oldValue);
+}
+
+// Utility function to display the current state of the queue
+void displayQueue() {
+    if (front == -1 || front > rear) {
+        printf("Current Queue: [Empty]\n\n");
+        return;
+    }
+    printf("Current Queue: ");
+    for (int i = front; i <= rear; i++) {
+        printf("%d ", queue[i]);
+    }
+    printf("\n\n");
+}
+
+int main() {
+    // Testing Insertion
+    insertElement(10);
+    insertElement(20);
+    insertElement(30);
+    insertElement(40);
+    displayQueue();
+
+    // Testing Update
+    updateElement(20, 99);
+    displayQueue();
+
+    // Testing Specific Deletion
+    deleteSpecificElement(30);
+    displayQueue();
+
+    // Testing Standard Deletion (Dequeue)
+    dequeue();
+    displayQueue();
+
+    return 0;
+}
 
